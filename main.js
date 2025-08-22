@@ -31,21 +31,29 @@ document.querySelectorAll(".our-story, .timeline-item").forEach((el) => {
   observer.observe(el);
 });
 
-// Update countdown (you can modify this to show actual time together)
 function updateCountdown() {
   // Replace this date with your actual anniversary date
   const anniversaryDate = new Date("2023-08-23"); // Example date
   const now = new Date();
-  const diff = now - anniversaryDate;
-
-  const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
-  const months = Math.floor(
-    (diff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30)
-  );
-  const days = Math.floor(
-    (diff % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24)
-  );
-
+  
+  let years = now.getFullYear() - anniversaryDate.getFullYear();
+  let months = now.getMonth() - anniversaryDate.getMonth();
+  let days = now.getDate() - anniversaryDate.getDate();
+  
+  // Adjust for negative days
+  if (days < 0) {
+    months--;
+    // Get the last day of the previous month
+    const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+    days += lastMonth.getDate();
+  }
+  
+  // Adjust for negative months
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+  
   document.getElementById("years").textContent = years;
   document.getElementById("months").textContent = months;
   document.getElementById("days").textContent = days;
@@ -65,3 +73,4 @@ window.addEventListener("scroll", () => {
     nav.style.boxShadow = "none";
   }
 });
+
